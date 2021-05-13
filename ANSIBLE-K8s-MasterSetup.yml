@@ -43,7 +43,6 @@
       content: '{
   "exec-opts": ["native.cgroupdriver=systemd"]
 }'
-
  
   - name: Start the docker services
     service:
@@ -53,16 +52,16 @@
   - name: Download iproute-tc
     yum:
       name: iproute-tc
-
-      
+  
   - file:
       dest: /proc/sys/net/bridge/bridge-nf-call-iptables
       content: "1"
 
   - name: Initialize the Kubernetes cluster using kubeadm
     command: kubeadm init --pod-network-cidr=10.240.0.0/16 --ignore-preflight-errors=NumCPU --ignore-preflight-errors=Mem --ignore-preflight-errors=Service-Docker --ignore-preflight-errors=FileExisting-tc
-
-
+  
+  - command: "kubeadm config images pull" 
+  
   - name: Setup kubeconfig 
     command: "{{ item }}"
     with_items:
